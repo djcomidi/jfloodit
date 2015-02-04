@@ -1,17 +1,17 @@
 package jfloodit.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
 import jfloodit.FloodIt;
 
 public class ActionPanel extends JPanel {
@@ -32,7 +32,7 @@ public class ActionPanel extends JPanel {
 	private void createComponents() {
 		cbtns = new ColorButton[6];
 		for (int i = 0; i < 6; i++) {
-			cbtns[i] = new ColorButton(FloodIt.COLORS[i]);
+			cbtns[i] = new ColorButton(this,FloodIt.COLORS[i]);
 		}
 		lblTurn = new JLabel("", SwingConstants.CENTER);
 		setTurn(1);
@@ -66,25 +66,15 @@ public class ActionPanel extends JPanel {
 	}
 
 	private void addListeners() {
-		MouseListener ml = new ColorListener();
-		for (ColorButton cbtn : cbtns) {
-			cbtn.addMouseListener(ml);
-		}
 		ActionListener al = new ButtonListener();
 		btnQuit.addActionListener(al);
 		btnNewGame.addActionListener(al);
 	}
 
-	private class ColorListener extends MouseAdapter {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if (e.getButton() == MouseEvent.BUTTON1) {
-				ColorButton btn = (ColorButton) e.getSource();
-				parent.floodWith(btn.getColor());
-			}
-		}
+	protected void floodWith(Color color) {
+		parent.floodWith(color);
 	}
-
+	
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(btnQuit)) {
